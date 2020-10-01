@@ -1,0 +1,284 @@
+<?php
+session_start(); 
+if (!isset($_SESSION['login_user'])){
+	echo "You need to login";
+	
+}
+$name=$_SESSION['login_user'];
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+
+
+
+
+
+
+.image-preview{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 220px;
+  height:300px;
+  margin-top: 50px;
+  margin-bottom:10px;
+  text-align: center;
+  font-family: arial;
+  background-color:white;
+  margin-left:480px;
+  border-radius:5px;
+  border:2px solid #dde1e7;
+  
+  background-color:#dde1e7;
+
+}
+.imgPrev-img{
+  display:none;
+  width:100%;
+}
+
+
+
+
+#inpFile{
+    width:230px;
+    
+    border:2px solid black;
+    
+}
+
+
+
+
+#info{
+    margin-top:35px;
+    margin-left:400px;
+    
+    
+}
+input {
+  display: inline-block;
+  border:2px solid black;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  margin-top:10px;
+  border-radius: 50px;
+  
+}
+#bt1{
+    background-color:black;
+    border-color:black;
+    width:150px;
+ height:40px;
+ color:white;
+ font-size:20px;
+ border-radius:5px;
+margin-left:525px;
+margin-top:5px;
+margin-bottom:20px;
+text-align:center;  
+}
+#IF{
+    margin-left:680px;
+}
+
+
+
+
+
+
+
+</style>
+<body class="w3-light-grey">
+
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  <span class="w3-bar-item w3-right">Logo</span>
+</div>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="avatar.png" class="w3-circle w3-margin-right" style="width:46px">
+    </div>
+    <div class="w3-col s8 w3-bar">
+      <span>Welcome, <strong>Mike</strong></span><br>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+      <a href="senior.php" class="w3-bar-item w3-button"><i class="fa fa-sign-out"></i></a>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h4>Dashboard</h4>
+  </div>
+  <div class="w3-bar-block">
+    
+  <a href="profileOwner.php" class="w3-bar-item w3-button w3-padding "><i class="fa fa-eye fa-fw"></i>  Overview</a>
+    
+    <a href="ownerCust.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Customers list</a>
+    <a href="ow_rewards.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-gift fa-fw"></i>  rewards</a>
+    
+    <a href="ed_ow_profile.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  edit Profile </a><br><br>
+    <a href="editStore.php" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Your Store  </a><br><br>
+  </div>
+
+
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+<div>
+
+
+
+<div id=part1>
+<form method="POST"   action="newRewards.php" enctype="multipart/form-data">
+<div class="image-preview" id="imagePreview">
+  <img src="" alt="Image Preview" class="imgPrev-img">
+  <span class="imgPrev-def"> Image Preview  </span>
+  
+</div> 
+ 
+ <div id="IF"><input type="file" name="inpFile" id="inpFile" style="margin-left:-200px;"    ></div>
+ <div id=info>
+ <p > Title &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text name="reTitle"  id="name"  /></p>
+ <p> Points &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text name="pts"  id="name"   /></p>
+ <p> Original Price  &nbsp&nbsp&nbsp<input type=text name="fromC"  id="name"   /></p>
+ <p> Disc. Price  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text name="toC"  id="name"   /></p>
+ <p> Sale  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type=text name="sale"  id="name"   /></p>
+</div>
+<button type="submit"    name="submit" id=bt1 > Add  </button>
+
+<script>
+      const inpFile=document.getElementById("inpFile");
+      const previewContainer=document.getElementById("imagePreview");
+      const previewImage=previewContainer.querySelector(".imgPrev-img"); 
+      const previewDefaultText=previewContainer.querySelector(".imgPrev-def"); 
+
+
+    inpFile.addEventListener("change",function(){
+      const file=this.files[0];
+      
+      if(file){
+        const reader =new FileReader();
+        previewDefaultText.style.display = "none";
+        previewImage.style.display = "block";
+
+        reader.addEventListener("load",function(){
+          console.log(this);
+          previewImage.setAttribute("src",this.result);
+
+
+        });
+        reader.readAsDataURL(file);
+
+
+      } else{
+        previewDefaultText.style.display =null;
+        previewImage.style.display = null;
+        previewImage.setAttribute("src","");
+      }
+
+
+
+    });
+
+
+</script>
+<?php
+  // Create database connection
+  $db = mysqli_connect("localhost", "root", "", "senior");
+
+  // Initialize message variable
+  $msg = "";
+
+  // If upload button is clicked ...
+  if (isset($_POST['submit'])) {
+  	// Get image name
+      $image = $_FILES['inpFile']['name'];
+      
+  	// Get text
+      $title=$_POST['reTitle'];
+      $pts=$_POST['pts'];
+      $OC=$_POST['fromC'];
+      $TC=$_POST['toC'];
+      $sale=$_POST['sale'];
+
+
+  	// image file directory
+  	$target = "rewards/".basename($image);
+
+  	$sql = "INSERT INTO rewards (id,userName, img,pts,Retitle,fromC,toC,sale) VALUES ('','$name','$image','$pts','$title','$OC','$TC','$sale')";
+  	// execute query
+  	mysqli_query($db, $sql);
+
+  	if (move_uploaded_file($_FILES['inpFile']['tmp_name'], $target)) {
+  		$msg = "Image uploaded successfully";
+  	}else{
+  		$msg = "Failed to upload image";
+  	}
+  }
+  ?>
+
+</form>
+</div>
+
+
+
+
+</div>
+
+  
+  
+
+  <!-- End page content -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
