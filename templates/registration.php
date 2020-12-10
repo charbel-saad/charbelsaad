@@ -38,10 +38,10 @@ class registrationTable extends WP_List_Table{
       $student_table = $wpdb->prefix . 'student';
       $reg_table = $wpdb->prefix . 'registration';
       //$sql = "SELECT * FROM $table_name WHERE c_code='$search_term' OR s_code='$search_term'";
-      $sql = "SELECT $student_table.studentCode AS student_code ,$student_table.fname AS student_name ,
-      $course_table.courseCode AS course_code ,$course_table.c_Name AS course_name ,$reg_table.c_code AS reg_c_code , 
-      $reg_table.s_code AS reg_s_code , $reg_table.registration_id AS registration_id FROM $student_table,$course_table,$reg_table  
-       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code  AND student_name='$search_term' AND course_name='$search_term' ORDER BY registration_id ";
+      $sql = "SELECT CONCAT($student_table.fname,' ',$student_table.lname,'(', $student_table.studentCode,' )') AS student_name ,
+      $course_table.courseCode AS course_code ,GROUP_CONCAT($course_table.c_Name,'(',$course_table.courseCode,')' SEPARATOR' <br>'  ) AS course ,$reg_table.c_code AS reg_c_code  , 
+      $reg_table.s_code AS reg_s_code , GROUP_CONCAT(DISTINCT $reg_table.registration_id) AS registration_id  FROM $student_table,$course_table,$reg_table  
+       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code    AND (student_name='$search_term' OR course='$search_term') GROUP BY reg_s_code  ";
       
       $results = $wpdb->get_results($sql , 'ARRAY_A');
   
@@ -49,16 +49,16 @@ class registrationTable extends WP_List_Table{
 
     }else{
 
-    if($orderby =='id' && $order == 'desc'){
+    if($orderby =='registration_id' && $order == 'desc'){
 
       global $wpdb;
       $course_table = $wpdb->prefix . 'course';
       $student_table = $wpdb->prefix . 'student';
       $reg_table = $wpdb->prefix . 'registration';
-    $sql = "SELECT $student_table.studentCode AS student_code ,$student_table.fname AS student_name ,
-      $course_table.courseCode AS course_code ,$course_table.c_Name AS course_name ,$reg_table.c_code AS reg_c_code , 
-      $reg_table.s_code AS reg_s_code , $reg_table.registration_id AS registration_id FROM $student_table,$course_table,$reg_table  
-       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code  ORDER BY registration_id ";
+      $sql = "SELECT CONCAT($student_table.fname,' ',$student_table.lname,'(', $student_table.studentCode,' )') AS student_name ,
+      $course_table.courseCode AS course_code ,GROUP_CONCAT($course_table.c_Name,'(',$course_table.courseCode,')' SEPARATOR' <br>'  ) AS course ,$reg_table.c_code AS reg_c_code  , 
+      $reg_table.s_code AS reg_s_code , GROUP_CONCAT(DISTINCT $reg_table.registration_id) AS registration_id  FROM $student_table,$course_table,$reg_table  
+       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code GROUP BY reg_s_code DESC "; 
 
 
     $results = $wpdb->get_results($sql , 'ARRAY_A');
@@ -69,11 +69,12 @@ class registrationTable extends WP_List_Table{
       $course_table = $wpdb->prefix . 'course';
       $student_table = $wpdb->prefix . 'student';
       $reg_table = $wpdb->prefix . 'registration';
-      $sql = "SELECT $student_table.studentCode AS student_code ,$student_table.fname AS student_name ,
-      $course_table.courseCode AS course_code ,$course_table.c_Name AS course_name ,$reg_table.c_code AS reg_c_code , 
-      $reg_table.s_code AS reg_s_code , $reg_table.registration_id AS registration_id FROM $student_table,$course_table,$reg_table  
-       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code";
-  
+      //$sql = " SELECT s_code , GROUP_CONCAT(DISTINCT c_code) as'course',GROUP_CONCAT(DISTINCT registration_id) as'registration_id' FROM $reg_table GROUP BY s_code ";
+      $sql = "SELECT CONCAT($student_table.fname,' ',$student_table.lname,'(', $student_table.studentCode,' )') AS student_name ,
+      $course_table.courseCode AS course_code ,GROUP_CONCAT($course_table.c_Name,'(',$course_table.courseCode,')' SEPARATOR' <br>'  ) AS course ,$reg_table.c_code AS reg_c_code  , 
+      $reg_table.s_code AS reg_s_code , GROUP_CONCAT(DISTINCT $reg_table.registration_id) AS registration_id  FROM $student_table,$course_table,$reg_table  
+       WHERE $student_table.studentCode = $reg_table.s_code AND  $course_table.courseCode = $reg_table.c_code GROUP BY reg_s_code ";
+
   
       $results = $wpdb->get_results($sql , 'ARRAY_A');
   
@@ -159,7 +160,7 @@ return sprintf('%1$s %2$s', $item['student_name'], $this->row_actions($actions) 
       'cb'=> '<input type="checkbox" />',
       "registration_id"=>"ID",
       "student_name"=>"Student Name",
-      "course_name"=>"Course Name"
+      "course"=>"Course Name"
     );
     return $columns;
   }
@@ -167,8 +168,8 @@ return sprintf('%1$s %2$s', $item['student_name'], $this->row_actions($actions) 
       switch($column_name){
 
         case 'registration_id':
-        case 'student_name':
-        case 'course_name':
+        case 's_code':
+        case 'course':
             return $item[$column_name];
         default:
             return "no value";
@@ -188,7 +189,7 @@ function reg_table_data(){
  // calling prepare_items of the class
   $reg_table->prepare_items();
   echo '<H1 style="float:left"> Registrations  </H1>
-  <a  href="?page=my-submenu-handle"><button class="add_btn" > Add New  </button></a> ';
+  <a  href="?page=my-registration-handle"><button class="add_btn" > Add New  </button></a> ';
   echo "<form method='post' name='frm_search_course' action='".$_SERVER['PHP_SELF']."?page=course_registration'>";
   $reg_table ->search_box("Search Registration(s)","Search_Registration_id");
   $reg_table->display();
@@ -202,27 +203,6 @@ function reg_table_data(){
 
 }
 reg_table_data();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
